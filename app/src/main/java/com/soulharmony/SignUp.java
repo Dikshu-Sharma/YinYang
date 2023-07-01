@@ -16,59 +16,98 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soulharmony.api.ApiService;
+import com.soulharmony.api.RetrofitService;
 import com.soulharmony.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUp extends AppCompatActivity {
     String[] genderOptions = {"Gender", "Male", "Female", "Other"};
 
     String gender = null;
 
+    RetrofitService retrofitService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        retrofitService = new RetrofitService();
+        RetrofitService retrofitService = new RetrofitService();
+        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
         setSpinnerForGender();
 
         Button button = findViewById(R.id.signupButtonId1);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText nameEditText = findViewById(R.id.nameId);
-                EditText phoneEditText = findViewById(R.id.phoneNumberId);
-                EditText emailEditText = findViewById(R.id.emailId);
-                EditText ageEditText = findViewById(R.id.ageId);
-                EditText cityEditText = findViewById(R.id.cityId);
+        button.setOnClickListener(v -> {
+            EditText nameEditText = findViewById(R.id.nameId);
+            EditText phoneEditText = findViewById(R.id.phoneNumberId);
+            EditText emailEditText = findViewById(R.id.emailId);
+            EditText ageEditText = findViewById(R.id.ageId);
+            EditText cityEditText = findViewById(R.id.cityId);
 
-                String name = nameEditText.getText().toString();
-                String phone = phoneEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String city = cityEditText.getText().toString();
-                String ageString = ageEditText.getText().toString();
-//                validateUserData(name, phone, email, city, ageString);
+            String name = nameEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String city = cityEditText.getText().toString();
+            String ageString = ageEditText.getText().toString();
+            if(validateUserData(name, phone, email, city, ageString)){
+                Integer age = null;
+                try {
+                        age = Integer.parseInt(ageString);
+                } catch (Exception ignored){
 
-                // TODO : REMOVE LATER ON.
-                ageString = "18";
-
-                Integer age = Integer.parseInt(ageString);
+                }
                 spinnerListener();
                 String userId = UUID.randomUUID().toString();
+                List<String> usersToExclude = new ArrayList<>();
+                usersToExclude.add(userId);
                 User user = new User(userId, name, email,
-                        phone, gender, age, new ArrayList<>(), 0.0,0.0, city);
-                // TODO : SAVE USER DATA TO IN MONGO
-                Intent intent = new Intent(SignUp.this, PhotosUpload.class);
-                intent.putExtra("userId", userId);
-                startActivity(intent);
-                finish();
+                        phone, gender, age, 0.0, 0.0, city, new HashMap<>(), usersToExclude);
+                apiService.save(user).enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        Toast.makeText(SignUp.this, "User Saved", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(SignUp.this, PhotosUpload.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(SignUp.this, "Failed", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
+
+
+
+        });
+
+        TextView logInButton = findViewById(R.id.loginButtonId1);
+        logInButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUp.this, SignIn.class);
+            startActivity(intent);
+            finish();
         });
     }
 
-    private void spinnerListener(){
+    private Boolean validateUserData(String name, String phone, String email, String city, String ageString) {
+        // TODO : add validation
+        return true;
+    }
+
+    private void spinnerListener() {
         Spinner spinner = findViewById(R.id.spinnerGender);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -86,18 +125,14 @@ public class SignUp extends AppCompatActivity {
 
     private void setSpinnerForGender() {
         Spinner spinnerGender = findViewById(R.id.spinnerGender);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genderOptions){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genderOptions) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-
-                // Set the default name (hint)
                 if (position == 0) {
                     TextView textView = view.findViewById(android.R.id.text1);
                     textView.setText("Gender");
                 }
-
-                // Customize the text size
                 TextView textView = view.findViewById(android.R.id.text1);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                 textView.setTypeface(null, Typeface.BOLD);
@@ -107,11 +142,8 @@ public class SignUp extends AppCompatActivity {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
-
-                // Customize the text size for dropdown items
                 TextView textView = view.findViewById(android.R.id.text1);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-
                 return view;
             }
         };

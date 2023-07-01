@@ -1,5 +1,7 @@
 package com.soulharmony.api;
 
+import com.google.gson.Gson;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -13,9 +15,8 @@ public class RetrofitService {
 
     private void initializeRetrofit() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8082")
-//                .baseUrl("https://jsonplaceholder.typicode.com")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://16.170.255.2:8080")
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .build();
     }
 
