@@ -9,6 +9,7 @@ public class User {
     private String name;
     private String email;
     private String phone;
+    private String password;
     private String gender;
     private Integer age;
     private Double latitude;
@@ -27,6 +28,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setName(String name) {
@@ -105,10 +114,12 @@ public class User {
         this.userIdsToExclude = userIdsToExclude;
     }
 
-    public User(String id, String name, String email, String phone, String gender, Integer age, Double latitude, Double longitude, String city, Map<String, String> imagesUrlWithIndex, List<String> userIdsToExclude) {
+    public User(String id, String name, String email, String phone, String password,
+                String gender, Integer age, Double latitude, Double longitude, String city, Map<String, String> imagesUrlWithIndex, List<String> userIdsToExclude) {
         _id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.phone = phone;
         this.gender = gender;
         this.age = age;

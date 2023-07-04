@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.soulharmony.api.ApiService;
 import com.soulharmony.api.RetrofitService;
 import com.soulharmony.model.User;
+import com.soulharmony.util.EmailValidator;
+import com.soulharmony.util.PasswordUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 public class SignUp extends AppCompatActivity {
     String[] genderOptions = {"Gender", "Male", "Female", "Other"};
 
-    String gender = null;
+    Integer genderIndex;
 
     RetrofitService retrofitService;
 
@@ -40,39 +42,39 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().hide();
+
         retrofitService = new RetrofitService();
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
         setSpinnerForGender();
-
-        Button button = findViewById(R.id.signupButtonId1);
-
-        button.setOnClickListener(v -> {
+        spinnerListener();
+        Button signUpNextButton = findViewById(R.id.signupButtonId1);
+        signUpNextButton.setOnClickListener(v -> {
             EditText nameEditText = findViewById(R.id.nameId);
             EditText phoneEditText = findViewById(R.id.phoneNumberId);
             EditText emailEditText = findViewById(R.id.emailId);
             EditText ageEditText = findViewById(R.id.ageId);
             EditText cityEditText = findViewById(R.id.cityId);
+            EditText passwordEditText = findViewById(R.id.passwordId1);
+            EditText confirmPasswordEditText = findViewById(R.id.confirmPasswordId1);
 
             String name = nameEditText.getText().toString();
             String phone = phoneEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String confirmPassword = confirmPasswordEditText.getText().toString();
             String email = emailEditText.getText().toString();
             String city = cityEditText.getText().toString();
             String ageString = ageEditText.getText().toString();
-            if(validateUserData(name, phone, email, city, ageString)){
-                Integer age = null;
-                try {
-                        age = Integer.parseInt(ageString);
-                } catch (Exception ignored){
-
-                }
-                spinnerListener();
+            if(validateUserData(name, phone, password, confirmPassword, email, city, ageString, genderIndex)){
+                Integer age = Integer.parseInt(ageString);
                 String userId = UUID.randomUUID().toString();
                 List<String> usersToExclude = new ArrayList<>();
                 usersToExclude.add(userId);
-                User user = new User(userId, name, email,
-                        phone, gender, age, 0.0, 0.0, city, new HashMap<>(), usersToExclude);
+                String encryptedPassword = PasswordUtils.hashPassword(password);
+                User user = new User(userId, name, email, phone,
+                        encryptedPassword, genderOptions[genderIndex], age, 0.0, 0.0, city, new HashMap<>(), usersToExclude);
                 apiService.save(user).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
@@ -102,8 +104,45 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
-    private Boolean validateUserData(String name, String phone, String email, String city, String ageString) {
+    private Boolean validateUserData(String name, String phone, String password, String confirmPassword,
+                                     String email, String city, String ageString, Integer genderIndex) {
         // TODO : add validation
+        if(name.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty() ||
+        city.isEmpty() || ageString.isEmpty()){
+            Toast.makeText(SignUp.this, "Please Fill All Fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(phone.length() != 10){
+            Toast.makeText(SignUp.this, "Phone Number Length Isn't 10", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(password.length() < 4){
+            Toast.makeText(SignUp.this, "Password Length Should Be At Least 4", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(!password.equals(confirmPassword)){
+            Toast.makeText(SignUp.this, "Password Not Matching", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(!EmailValidator.isValidEmail(email)){
+            Toast.makeText(SignUp.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(genderIndex == 0){
+            Toast.makeText(SignUp.this, "Please Select Gender", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            try {
+                int age = Integer.parseInt(ageString);
+                if(age < 16 || age > 100){
+                    Toast.makeText(SignUp.this, "Age Should Be Between 16 - 100", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            } catch (Exception ignored){
+                Toast.makeText(SignUp.this, "Age Should Be Number", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
         return true;
     }
 
@@ -112,8 +151,8 @@ public class SignUp extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                gender = parent.getItemAtPosition(position).toString();
-                Toast.makeText(SignUp.this, " Select Gender", Toast.LENGTH_SHORT).show();
+                parent.getItemAtPosition(position).toString();
+                genderIndex = position;
             }
 
             @Override

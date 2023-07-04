@@ -10,7 +10,11 @@
         android:id="@+id/rejectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
         android:text="Reject"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.041"
@@ -22,7 +26,11 @@
         android:id="@+id/likeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
         android:text="Like"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.958"
@@ -31,27 +39,43 @@
         app:layout_constraintVertical_bias="0.977" />
 
     <Button
-        android:id="@+id/settingButton"
+        android:id="@+id/logOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Setting"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:text="Log Out"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.023" />
 
-    <ImageView
-        android:id="@+id/photo"
-        android:layout_width="359dp"
-        android:layout_height="465dp"
+    <FrameLayout
+        android:layout_width="425dp"
+        android:layout_height="457dp"
+        android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.519"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.061"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/rightButton"
@@ -81,29 +105,32 @@
 
     <TextView
         android:id="@+id/userName"
-        android:layout_width="191dp"
-        android:layout_height="43dp"
+        android:layout_width="234dp"
+        android:layout_height="42dp"
         android:text="Unknown"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.828" />
+        app:layout_constraintVertical_bias="0.898" />
 
     <TextView
         android:id="@+id/userLocation"
-        android:layout_width="192dp"
-        android:layout_height="22dp"
+        android:layout_width="147dp"
+        android:layout_height="36dp"
         android:text="Unknown"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.869" />
+        app:layout_constraintVertical_bias="0.899" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

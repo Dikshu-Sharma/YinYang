@@ -25,6 +25,7 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,16 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
     List<String> currentUserImages = new ArrayList<>();
 
+    String DEFAULT_IMAGE = "https://firebasestorage.googleapis.com/v0/b/yinyang-9f595.appspot.com/o/userImages%2F66eec5ae-7de1-48b5-9463-8d761ad27ca3*_*1?alt=media&token=a12b216e-3c78-41a6-a9c1-05f1eadfd37f";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         ImageView imageView = findViewById(R.id.photo);
         TextView userNameView = findViewById(R.id.userName);
         TextView userLocationView = findViewById(R.id.userLocation);
+        Button logOutButton = findViewById(R.id.logOutButton);
 
         retrofitService = new RetrofitService();
         RetrofitService retrofitService = new RetrofitService();
@@ -67,24 +73,36 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 users = response.body();
                 if (users.size() == 0) {
+                    users.add(new User(null, null, null, null, null, null, null, null, null, null, new HashMap<>(), new ArrayList<>()));
                     Toast.makeText(MainActivity.this, "No Users Found", Toast.LENGTH_LONG).show();
                 }
                 currentUser = users.get(0);
-                Map<String, String> imagesUrlWithIndex = currentUser.getImagesUrlWithIndex();
+                Map<String, String> imagesUrlWithIndex = (currentUser.getImagesUrlWithIndex() == null)?new HashMap<>():currentUser.getImagesUrlWithIndex();
                 currentUserImages = new ArrayList<>(imagesUrlWithIndex.values());
-                Picasso.get()
-                        .load(currentUserImages.get(userImageIndex))
-                        .into(imageView);
-                TextView userName = findViewById(R.id.userName);
-                userName.setText(currentUser.getName());
-                TextView userLocation = findViewById(R.id.userLocation);
-                userLocation.setText(currentUser.getCity());
+                if(currentUserImages.size()>0) {
+                    Picasso.get()
+                            .load(currentUserImages.get(userImageIndex))
+                            .into(imageView);
+                }
+                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
+                userLocationView.setText(currentUser.getCity());
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Users Fetch Failed", Toast.LENGTH_LONG).show();
             }
+        });
+
+        logOutButton.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isLoggedIn", false);
+            editor.putString("userId", null);
+            editor.apply();
+            Intent intent1 = new Intent(MainActivity.this, SignIn.class);
+            startActivity(intent1);
+            finish();
         });
 
 
@@ -113,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get()
                         .load(currentUserImages.get(0))
                         .into(imageView);
-                userNameView.setText(currentUser.getName());
+                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
                 userLocationView.setText(currentUser.getCity());
             }
         });
@@ -126,9 +144,8 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get()
                         .load(currentUserImages.get(0))
                         .into(imageView);
-                userNameView.setText(currentUser.getName());
-                TextView userLocation12 = findViewById(R.id.userLocation);
-                userLocation12.setText(currentUser.getCity());
+                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
+                userLocationView.setText(currentUser.getCity());
             }
         });
     }

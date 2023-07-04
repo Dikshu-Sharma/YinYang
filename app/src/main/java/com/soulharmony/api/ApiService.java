@@ -16,7 +16,7 @@ public interface ApiService {
     @POST("/v1/home")
     Call<List<User>> getUsersHome(@Body UserFilter user);
 
-    @GET("/v1/login/{phone}")
+    @GET("/v1/phone/{phone}")
     Call<User> getUserByPhone(@Path("phone") String phone);
     @POST("/v1/user")
     Call<User> save(@Body User user);
