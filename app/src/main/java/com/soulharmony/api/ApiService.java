@@ -10,7 +10,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @POST("/v1/home")
@@ -23,4 +25,13 @@ public interface ApiService {
 
     @POST("/v1/images")
     Call<Boolean> saveImagesUrl(@Body ImagesRequest imagesRequest);
+
+    @PUT("/v1/like")
+    Call<Boolean> userLike(@Query("logInUserId") String logInUserId, @Query("likedUserId") String likedUserId);
+
+    @PUT("/v1/dislike")
+    Call<Boolean> userDislike(@Query("logInUserId") String logInUserId, @Query("dislikedUserId") String dislikedUserId);
+
+    @GET("/v1/match")
+    Call<Boolean> matches(@Query("logInUserId") String logInUserId);
 }

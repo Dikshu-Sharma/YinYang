@@ -1,34 +1,33 @@
 package com.soulharmony;
 
+import static com.soulharmony.model.Constants.DEFAULT_IMAGE;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.soulharmony.api.ApiService;
 import com.soulharmony.api.RetrofitService;
+import com.soulharmony.model.Constants;
 import com.soulharmony.model.User;
 import com.soulharmony.model.UserFilter;
+import com.soulharmony.service.MatchService;
 import com.squareup.picasso.Picasso;
-//import com.soulharmony.service.S3Helper;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,17 +37,13 @@ public class MainActivity extends AppCompatActivity {
     int userIndex = 0;
     int userImageIndex = 0;
 
-    User currentUser;
+    User displayUser;
 
-    String userId;
-
-    RetrofitService retrofitService;
+    String logInUserId;
 
     List<User> users = new ArrayList<>();
 
     List<String> currentUserImages = new ArrayList<>();
-
-    String DEFAULT_IMAGE = "https://firebasestorage.googleapis.com/v0/b/yinyang-9f595.appspot.com/o/userImages%2F66eec5ae-7de1-48b5-9463-8d761ad27ca3*_*1?alt=media&token=a12b216e-3c78-41a6-a9c1-05f1eadfd37f";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,39 +53,41 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
+        logInUserId = intent.getStringExtra("userId");
         ImageView imageView = findViewById(R.id.photo);
         TextView userNameView = findViewById(R.id.userName);
         TextView userLocationView = findViewById(R.id.userLocation);
         Button logOutButton = findViewById(R.id.logOutButton);
+        ImageButton matchButton = findViewById(R.id.matchButtonId1);
 
-        retrofitService = new RetrofitService();
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        MatchService matchService = new MatchService();
 
-        apiService.getUsersHome(new UserFilter(userId)).enqueue(new Callback<List<User>>() {
+        apiService.getUsersHome(new UserFilter(logInUserId)).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 users = response.body();
                 if (users.size() == 0) {
-                    users.add(new User(null, null, null, null, null, null, null, null, null, null, new HashMap<>(), new ArrayList<>()));
-                    Toast.makeText(MainActivity.this, "No Users Found", Toast.LENGTH_LONG).show();
+                    users.add(Constants.DUMMY_USER);
                 }
-                currentUser = users.get(0);
-                Map<String, String> imagesUrlWithIndex = (currentUser.getImagesUrlWithIndex() == null)?new HashMap<>():currentUser.getImagesUrlWithIndex();
-                currentUserImages = new ArrayList<>(imagesUrlWithIndex.values());
-                if(currentUserImages.size()>0) {
-                    Picasso.get()
-                            .load(currentUserImages.get(userImageIndex))
-                            .into(imageView);
+                else {
+                    displayUser = users.get(0);
+                    Map<String, String> imagesUrlWithIndex = (displayUser.getImagesUrlWithIndex() == null) ? new HashMap<>() : displayUser.getImagesUrlWithIndex();
+                    currentUserImages = new ArrayList<>(imagesUrlWithIndex.values());
+                    if (currentUserImages.size() > 0) {
+                        Picasso.get()
+                                .load(currentUserImages.get(userImageIndex))
+                                .into(imageView);
+                    }
+                    userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
+                    userLocationView.setText(displayUser.getCity());
                 }
-                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
-                userLocationView.setText(currentUser.getCity());
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Users Fetch Failed", Toast.LENGTH_LONG).show();
+                Log.e("event=UserFetchFailed", "UserId=" + logInUserId);
             }
         });
 
@@ -102,6 +99,13 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
             Intent intent1 = new Intent(MainActivity.this, SignIn.class);
             startActivity(intent1);
+            finish();
+        });
+
+        matchButton.setOnClickListener(v -> {
+            Intent intent12 = new Intent(MainActivity.this, Match.class);
+            intent12.putExtra("userId", logInUserId);
+            startActivity(intent12);
             finish();
         });
 
@@ -125,28 +129,45 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.likeButton).setOnClickListener(v -> {
+            Boolean isMatch = matchService.userLike(logInUserId, displayUser.get_id());
+//            if(isMatch){
+//                //TODO: SHIFT TO MATCH SCREEN
+//            }
             if (userIndex < users.size() - 1) {
                 userIndex++;
-                currentUser = users.get(userIndex);
+                displayUser = users.get(userIndex);
+                currentUserImages = getCurrentUserImages(displayUser);
                 Picasso.get()
-                        .load(currentUserImages.get(0))
+                        .load(currentUserImages.get(userImageIndex))
                         .into(imageView);
-                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
-                userLocationView.setText(currentUser.getCity());
+                userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
+                userLocationView.setText(displayUser.getCity());
             }
         });
 
         findViewById(R.id.rejectButton).setOnClickListener(v -> {
-            if (userIndex > 0) {
-                userIndex--;
-                userImageIndex = 0;
-                currentUser = users.get(userIndex);
+            matchService.userDislike(logInUserId, displayUser.get_id());
+            if (userIndex < users.size() - 1) {
+                userIndex++;
+                displayUser = users.get(userIndex);
+                currentUserImages = getCurrentUserImages(displayUser);
                 Picasso.get()
-                        .load(currentUserImages.get(0))
+                        .load(currentUserImages.get(userImageIndex))
                         .into(imageView);
-                userNameView.setText(currentUser.getName() + ", " + currentUser.getAge());
-                userLocationView.setText(currentUser.getCity());
+                userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
+                userLocationView.setText(displayUser.getCity());
             }
         });
+    }
+
+    private List<String> getCurrentUserImages(User currentUser) {
+        if(currentUser.getImagesUrlWithIndex().size() != 0){
+            return new ArrayList<>(currentUser.getImagesUrlWithIndex().values());
+        }
+        else{
+            List<String> defaultImages = new ArrayList<>();
+            defaultImages.add(DEFAULT_IMAGE);
+            return defaultImages;
+        }
     }
 }

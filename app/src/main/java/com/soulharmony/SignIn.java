@@ -23,8 +23,6 @@ import retrofit2.Response;
 
 public class SignIn extends AppCompatActivity {
 
-    RetrofitService retrofitService;
-
     String userId = null;
 
     @Override
@@ -33,8 +31,6 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         getSupportActionBar().hide();
 
-
-        retrofitService = new RetrofitService();
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 

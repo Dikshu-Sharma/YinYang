@@ -30,10 +30,7 @@ import retrofit2.Response;
 public class PhotosUpload extends AppCompatActivity {
     Map<String, String> imagesUrlWithNumber = new HashMap<>();
     FirebaseStorage firebaseStorage;
-
     Uri imageUri;
-
-    RetrofitService retrofitService;
 
     String userId = null;
 
@@ -73,7 +70,6 @@ public class PhotosUpload extends AppCompatActivity {
         // TODO : SAVE IMAGES URL MAP INTO MONGO INSIDE USER
         Button submitButton = findViewById(R.id.nextButtonId);
         submitButton.setOnClickListener(v -> {
-            retrofitService = new RetrofitService();
             RetrofitService retrofitService = new RetrofitService();
             ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
             apiService.saveImagesUrl(new ImagesRequest(userId, imagesUrlWithNumber)).enqueue(new Callback<Boolean>() {

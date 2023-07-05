@@ -33,10 +33,7 @@ import retrofit2.Response;
 
 public class SignUp extends AppCompatActivity {
     String[] genderOptions = {"Gender", "Male", "Female", "Other"};
-
     Integer genderIndex;
-
-    RetrofitService retrofitService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,6 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getSupportActionBar().hide();
 
-        retrofitService = new RetrofitService();
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
