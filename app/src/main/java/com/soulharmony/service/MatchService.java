@@ -19,7 +19,7 @@ public class MatchService {
         apiService.userLike(logInUserId, likedUserId).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                isMatch = response.body();
+                isMatch = response.body() != null && response.body();
             }
 
             @Override
@@ -27,9 +27,9 @@ public class MatchService {
                 Log.i("event=dislikeApiFailed", "logInUserId=" + logInUserId + " likedUserId=" + likedUserId);
             }
         });
-//        if(isMatch){
-//            Log.e("event=userMatched", "logInUserId=" + logInUserId + " likedUserId=" + likedUserId);
-//        }
+        if(isMatch){
+            Log.e("event=userMatched", "logInUserId=" + logInUserId + " likedUserId=" + likedUserId);
+        }
         return isMatch;
     }
 

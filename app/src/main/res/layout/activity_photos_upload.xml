@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="109dp"
-        android:layout_height="85dp"
+        android:layout_width="@dimen/_109sdp"
+        android:layout_height="@dimen/_85sdp"
         android:src="@drawable/sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="174dp"
-        android:layout_height="175dp"
+        android:layout_width="@dimen/_174sdp"
+        android:layout_height="@dimen/_175sdp"
         android:src="@drawable/sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +32,8 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="111dp"
-        android:layout_height="108dp"
+        android:layout_width="@dimen/_111sdp"
+        android:layout_height="@dimen/_108sdp"
         android:src="@drawable/sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +44,8 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="142dp"
-        android:layout_height="125dp"
+        android:layout_width="@dimen/_142sdp"
+        android:layout_height="@dimen/_125sdp"
         android:src="@drawable/sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,8 +56,8 @@
 
     <Button
         android:id="@+id/nextButtonId"
-        android:layout_width="141dp"
-        android:layout_height="53dp"
+        android:layout_width="@dimen/_141sdp"
+        android:layout_height="@dimen/_53sdp"
         android:backgroundTint="@color/black"
         android:text="Next"
         android:textSize="@dimen/_20sdp"
@@ -70,8 +70,8 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="130dp"
-        android:layout_height="99dp"
+        android:layout_width="@dimen/_130sdp"
+        android:layout_height="@dimen/_99sdp"
         android:src="@drawable/sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,8 +82,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="254dp"
-        android:layout_height="57dp"
+        android:layout_width="@dimen/_254sdp"
+        android:layout_height="@dimen/_57sdp"
         android:background="@color/white"
         android:gravity="center"
         android:text="Upload Photos"
@@ -99,8 +99,8 @@
 
     <ImageView
         android:id="@+id/logo2"
-        android:layout_width="199dp"
-        android:layout_height="199dp"
+        android:layout_width="@dimen/_199sdp"
+        android:layout_height="@dimen/_199sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

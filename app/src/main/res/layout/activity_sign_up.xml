@@ -9,8 +9,8 @@
 
     <Spinner
         android:id="@+id/spinnerGender"
-        android:layout_width="259dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_259sdp"
+        android:layout_height="@dimen/_52sdp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,8 +21,8 @@
 
     <EditText
         android:id="@+id/nameId"
-        android:layout_width="259dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_259sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
@@ -38,8 +38,8 @@
 
     <EditText
         android:id="@+id/emailId"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -55,8 +55,8 @@
 
     <EditText
         android:id="@+id/passwordId1"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -72,8 +72,8 @@
 
     <EditText
         android:id="@+id/confirmPasswordId1"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
@@ -89,8 +89,8 @@
 
     <EditText
         android:id="@+id/cityId"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="City"
         android:inputType="text"
@@ -106,8 +106,8 @@
 
     <EditText
         android:id="@+id/ageId"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Age"
         android:inputType="number"
@@ -123,23 +123,24 @@
 
     <Button
         android:id="@+id/signupButtonId1"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_50sdp"
         android:backgroundTint="@color/black"
         android:text="Next"
+        android:textColor="@color/white"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977" />
+        app:layout_constraintVertical_bias="0.984" />
 
     <Button
         android:id="@+id/loginButtonId1"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_50sdp"
         android:backgroundTint="@color/black"
         android:gravity="center"
         android:text="Sign In"
@@ -154,8 +155,8 @@
 
     <EditText
         android:id="@+id/phoneNumberId"
-        android:layout_width="260dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/_260sdp"
+        android:layout_height="@dimen/_52sdp"
         android:ems="10"
         android:hint="Phone"
         android:inputType="textPersonName"
@@ -170,8 +171,8 @@
 
     <ImageView
         android:id="@+id/logo1"
-        android:layout_width="155dp"
-        android:layout_height="155dp"
+        android:layout_width="@dimen/_155sdp"
+        android:layout_height="@dimen/_155sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

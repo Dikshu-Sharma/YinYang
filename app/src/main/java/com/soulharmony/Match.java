@@ -1,22 +1,19 @@
 package com.soulharmony;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulharmony.adapter.UserAdapter;
 import com.soulharmony.api.ApiService;
 import com.soulharmony.api.RetrofitService;
 import com.soulharmony.model.Constants;
 import com.soulharmony.model.User;
-import com.soulharmony.model.UserFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +35,16 @@ public class Match extends AppCompatActivity {
         setContentView(R.layout.activity_match);
         getSupportActionBar().hide();
 
-        ImageButton homeButton = findViewById(R.id.homeId2);
-        homeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(Match.this, MainActivity.class);
-            intent.putExtra("userId", logInUserId);
-            startActivity(intent);
-            finish();
-        });
-
         Intent intent = getIntent();
-        String logInUserId = intent.getStringExtra("userId");
+        logInUserId = intent.getStringExtra("userId");
+
+//        ImageButton homeButton = findViewById(R.id.homeButtonId4);
+//        homeButton.setOnClickListener(v -> {
+//            Intent intentMain = new Intent(Match.this, MainActivity.class);
+//            intentMain.putExtra("userId", logInUserId);
+//            startActivity(intentMain);
+//            finish();
+//        });
 
         recyclerView = findViewById(R.id.mainUserRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,7 +54,7 @@ public class Match extends AppCompatActivity {
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
-        apiService.getUsersHome(new UserFilter("953972d5-462e-42fa-ba01-31cecb654098")).enqueue(new Callback<List<User>>() {
+        apiService.matches(logInUserId).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if(response.body().size() == 0){

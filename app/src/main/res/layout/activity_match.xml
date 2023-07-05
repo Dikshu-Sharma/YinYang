@@ -7,104 +7,89 @@
 
     <LinearLayout
         android:id="@+id/toolBar"
-        android:layout_width="wrap_content"
-        android:layout_height="83dp"
+        android:layout_width="match_parent"
+        android:layout_height="142dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="154dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="654dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
         android:background="@color/white"
         android:gravity="right">
 
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="59dp"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Matches"
+            android:text="Messages"
             android:textColor="#2a364e"
             android:textSize="@dimen/_20sdp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/logoutimg"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@drawable/logout"
+            android:transitionName="loout_img" />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainUserRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="464dp"
+        android:layout_width="376dp"
+        android:layout_height="380dp"
+        android:layout_above="@id/footer"
+        android:layout_below="@id/toolBar"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="167dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginBottom="167dp" />
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:layout_marginRight="@dimen/_14sdp"
+        android:layout_marginBottom="@dimen/_200sdp" />
 
-    <ImageButton
-        android:id="@+id/homeId2"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="142dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="798dp"
-        android:layout_marginEnd="309dp"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="17dp"
-        android:background="@drawable/home"
-        android:transitionName="loout_img" />
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="@dimen/_550sdp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginRight="-1dp"
+        android:background="@color/white"
+        android:gravity="right">
 
-    <ImageButton
-        android:id="@+id/profileSettingId2"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="309dp"
-        android:layout_marginTop="798dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="17dp"
-        android:background="@drawable/setting"
-        android:transitionName="loout_img" />
 
-    <ImageButton
-        android:id="@+id/matchesButtonId2"
-        android:layout_width="79dp"
-        android:layout_height="79dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="166dp"
-        android:layout_marginTop="798dp"
-        android:layout_marginEnd="166dp"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="17dp"
-        android:background="@drawable/messageicon"
-        android:transitionName="loout_img" />
+        <ImageView
+            android:id="@+id/logoutimg"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@drawable/setting"
+            android:transitionName="loout_img" />
+
+    </LinearLayout>
 
 </RelativeLayout>

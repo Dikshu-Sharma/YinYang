@@ -32,14 +32,14 @@
 
                 android:text="Name"
                 android:textColor="@color/black"
-                android:textSize="23.40dp"/>
+                android:textSize="23.40sp"/>
 
             <TextView
                 android:id="@+id/userStatusId1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="10.40dp"
+                android:textSize="@dimen/_11sdp"
                 android:text="Status"/>
 
         </LinearLayout>

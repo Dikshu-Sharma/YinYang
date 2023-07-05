@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     List<String> currentUserImages = new ArrayList<>();
 
+    Boolean isMatch = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,23 +59,25 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.photo);
         TextView userNameView = findViewById(R.id.userName);
         TextView userLocationView = findViewById(R.id.userLocation);
-        Button logOutButton = findViewById(R.id.logOutButton);
+        ImageButton logOutButton = findViewById(R.id.logButtonId3);
         ImageButton matchButton = findViewById(R.id.matchButtonId1);
 
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
-        MatchService matchService = new MatchService();
 
         apiService.getUsersHome(new UserFilter(logInUserId)).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                users = response.body();
+                users = response.body() == null ? new ArrayList<>() : response.body();
                 if (users.size() == 0) {
-                    users.add(Constants.DUMMY_USER);
-                }
-                else {
+                    Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
+                    intentMatchScreen.putExtra("userId", logInUserId);
+                    startActivity(intentMatchScreen);
+                    finish();
+                } else {
                     displayUser = users.get(0);
-                    Map<String, String> imagesUrlWithIndex = (displayUser.getImagesUrlWithIndex() == null) ? new HashMap<>() : displayUser.getImagesUrlWithIndex();
+                    Map<String, String> imagesUrlWithIndex = (displayUser.getImagesUrlWithIndex() == null) ?
+                            new HashMap<>() : displayUser.getImagesUrlWithIndex();
                     currentUserImages = new ArrayList<>(imagesUrlWithIndex.values());
                     if (currentUserImages.size() > 0) {
                         Picasso.get()
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "API Failed", Toast.LENGTH_SHORT).show();
                 Log.e("event=UserFetchFailed", "UserId=" + logInUserId);
             }
         });
@@ -109,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
-
-        findViewById(R.id.rightButton).setOnClickListener(v -> {
+        Button rightImageButton = findViewById(R.id.rightButton);
+        rightImageButton.setOnClickListener(v -> {
             if (userImageIndex < currentUserImages.size() - 1) {
                 userImageIndex++;
                 Picasso.get()
@@ -118,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
                         .into(imageView);
             }
         });
-
-        findViewById(R.id.leftButton).setOnClickListener(v -> {
+        Button leftImageButton = findViewById(R.id.leftButton);
+        leftImageButton.setOnClickListener(v -> {
             if (userImageIndex > 0) {
                 userImageIndex--;
                 Picasso.get()
@@ -128,11 +133,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.likeButton).setOnClickListener(v -> {
-            Boolean isMatch = matchService.userLike(logInUserId, displayUser.get_id());
-//            if(isMatch){
-//                //TODO: SHIFT TO MATCH SCREEN
-//            }
+        ImageButton likeButton = findViewById(R.id.likeButtonId1);
+        likeButton.setOnClickListener(v -> {
+            if(displayUser.get_id() != null) {
+                apiService.userLike(logInUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        isMatch = response.body() != null && response.body();
+                        if(isMatch){
+                            Log.e("event=userMatched", "logInUserId=" + logInUserId + " likedUserId=" + displayUser.get_id());
+                            Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
+                            intentMatchScreen.putExtra("userId", logInUserId);
+                            startActivity(intentMatchScreen);
+                            finish();
+                        }
+                        else if(userIndex < users.size() - 1) {
+                            userIndex++;
+                            displayUser = users.get(userIndex);
+                            currentUserImages = getCurrentUserImages(displayUser);
+                            Picasso.get()
+                                    .load(currentUserImages.get(userImageIndex))
+                                    .into(imageView);
+                            userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
+                            userLocationView.setText(displayUser.getCity());
+                        }
+                        else{
+                            Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
+                            intentMatchScreen.putExtra("userId", logInUserId);
+                            startActivity(intentMatchScreen);
+                            finish();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Log.i("event=dislikeApiFailed", "logInUserId=" + logInUserId + " likedUserId=" + displayUser.get_id());
+                    }
+                });
+            }
+        });
+
+        ImageButton rejectButton = findViewById(R.id.rejectButtonId1);
+        rejectButton.setOnClickListener(v -> {
+            apiService.userDislike(logInUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    Boolean isDone = response.body();
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    Log.e("event=dislikeApiFailed", "logInUserId=" + logInUserId + " dislikedUserId=" + displayUser.get_id());
+                }
+            });
             if (userIndex < users.size() - 1) {
                 userIndex++;
                 displayUser = users.get(userIndex);
@@ -143,23 +195,14 @@ public class MainActivity extends AppCompatActivity {
                 userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
                 userLocationView.setText(displayUser.getCity());
             }
-        });
-
-        findViewById(R.id.rejectButton).setOnClickListener(v -> {
-            matchService.userDislike(logInUserId, displayUser.get_id());
-            if (userIndex < users.size() - 1) {
-                userIndex++;
-                displayUser = users.get(userIndex);
-                currentUserImages = getCurrentUserImages(displayUser);
-                Picasso.get()
-                        .load(currentUserImages.get(userImageIndex))
-                        .into(imageView);
-                userNameView.setText(displayUser.getName() + ", " + displayUser.getAge());
-                userLocationView.setText(displayUser.getCity());
+            else{
+                Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
+                intentMatchScreen.putExtra("userId", logInUserId);
+                startActivity(intent);
+                finish();
             }
         });
     }
-
     private List<String> getCurrentUserImages(User currentUser) {
         if(currentUser.getImagesUrlWithIndex().size() != 0){
             return new ArrayList<>(currentUser.getImagesUrlWithIndex().values());
