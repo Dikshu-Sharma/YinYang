@@ -30,5 +30,4 @@ user-friendly interface, YinYang offers a seamless and enjoyable dating experien
 
 ### Demo
 
-
-![YinYangDemo](https://github.com/silenceofranger/YinYang/assets/38451055/d6d055de-2658-46e2-bd6d-9e6adb11dcd5)
+![YinYangDemo](https://github.com/silenceofranger/YinYang/assets/38451055/3293b808-6568-4248-be6d-15470ccd5f78)
