@@ -30,4 +30,4 @@ user-friendly interface, YinYang offers a seamless and enjoyable dating experien
 
 ### Demo
 
-<iframe width="560" height="315" src="YinYangDemo.mov" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="/YinYangDemo.mov" frameborder="0" allowfullscreen></iframe>
