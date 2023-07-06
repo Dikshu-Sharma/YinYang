@@ -1,5 +1,5 @@
 # YinYang
-<img src="/YinYangLogo.png" alt="Project Flow Diagram" width="300" height="300">
+<img src="/YinYangLogo.webp" alt="Project Flow Diagram" width="300" height="300">
 
 # Description
 YinYang is a modern and intuitive dating Android app designed to connect individuals with shared
