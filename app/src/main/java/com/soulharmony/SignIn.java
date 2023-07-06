@@ -41,10 +41,10 @@ public class SignIn extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-        userId = sharedPreferences.getString("userId", null);
+        userId = sharedPreferences.getString("loginUserId", null);
         if (isLoggedIn) {
             Intent intent = new Intent(SignIn.this, MainActivity.class);
-            intent.putExtra("userId", userId);
+            intent.putExtra("loginUserId", userId);
             startActivity(intent);
             finish();
         }
@@ -75,10 +75,10 @@ public class SignIn extends AppCompatActivity {
                                 userId = response.body().get_id();
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putBoolean("isLoggedIn", true);
-                                editor.putString("userId", userId);
+                                editor.putString("loginUserId", userId);
                                 editor.apply();
                                 Intent intent = new Intent(SignIn.this, MainActivity.class);
-                                intent.putExtra("userId", userId);
+                                intent.putExtra("loginUserId", userId);
                                 startActivity(intent);
                                 finish();
                             }

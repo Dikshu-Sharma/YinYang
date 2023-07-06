@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,10 +17,8 @@ import android.widget.Toast;
 
 import com.soulharmony.api.ApiService;
 import com.soulharmony.api.RetrofitService;
-import com.soulharmony.model.Constants;
 import com.soulharmony.model.User;
 import com.soulharmony.model.UserFilter;
-import com.soulharmony.service.MatchService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     User displayUser;
 
-    String logInUserId;
+    String loginUserId;
 
     List<User> users = new ArrayList<>();
 
@@ -53,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-
         Intent intent = getIntent();
-        logInUserId = intent.getStringExtra("userId");
+        loginUserId = intent.getStringExtra("loginUserId");
         ImageView imageView = findViewById(R.id.photo);
         TextView userNameView = findViewById(R.id.userName);
         TextView userLocationView = findViewById(R.id.userLocation);
@@ -65,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
-        apiService.getUsersHome(new UserFilter(logInUserId)).enqueue(new Callback<List<User>>() {
+        apiService.getUsersHome(new UserFilter(loginUserId)).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 users = response.body() == null ? new ArrayList<>() : response.body();
                 if (users.size() == 0) {
-                    Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
-                    intentMatchScreen.putExtra("userId", logInUserId);
+                    Intent intentMatchScreen = new Intent(MainActivity.this, MatchActivity.class);
+                    intentMatchScreen.putExtra("loginUserId", loginUserId);
                     startActivity(intentMatchScreen);
                     finish();
                 } else {
@@ -92,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "API Failed", Toast.LENGTH_SHORT).show();
-                Log.e("event=UserFetchFailed", "UserId=" + logInUserId);
+                Log.e("event=UserFetchFailed", "UserId=" + loginUserId);
             }
         });
 
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isLoggedIn", false);
-            editor.putString("userId", null);
+            editor.putString("loginUserId", null);
             editor.apply();
             Intent intent1 = new Intent(MainActivity.this, SignIn.class);
             startActivity(intent1);
@@ -108,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         matchButton.setOnClickListener(v -> {
-            Intent intent12 = new Intent(MainActivity.this, Match.class);
-            intent12.putExtra("userId", logInUserId);
+            Intent intent12 = new Intent(MainActivity.this, MatchActivity.class);
+            intent12.putExtra("loginUserId", loginUserId);
             startActivity(intent12);
             finish();
         });
@@ -136,14 +132,14 @@ public class MainActivity extends AppCompatActivity {
         ImageButton likeButton = findViewById(R.id.likeButtonId1);
         likeButton.setOnClickListener(v -> {
             if(displayUser.get_id() != null) {
-                apiService.userLike(logInUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
+                apiService.userLike(loginUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         isMatch = response.body() != null && response.body();
                         if(isMatch){
-                            Log.e("event=userMatched", "logInUserId=" + logInUserId + " likedUserId=" + displayUser.get_id());
-                            Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
-                            intentMatchScreen.putExtra("userId", logInUserId);
+                            Log.e("event=userMatched", "logInUserId=" + loginUserId + " likedUserId=" + displayUser.get_id());
+                            Intent intentMatchScreen = new Intent(MainActivity.this, MatchActivity.class);
+                            intentMatchScreen.putExtra("loginUserId", loginUserId);
                             startActivity(intentMatchScreen);
                             finish();
                         }
@@ -159,15 +155,15 @@ public class MainActivity extends AppCompatActivity {
                             userLocationView.setText(displayUser.getCity());
                         }
                         else{
-                            Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
-                            intentMatchScreen.putExtra("userId", logInUserId);
+                            Intent intentMatchScreen = new Intent(MainActivity.this, MatchActivity.class);
+                            intentMatchScreen.putExtra("loginUserId", loginUserId);
                             startActivity(intentMatchScreen);
                             finish();
                         }
                     }
                     @Override
                     public void onFailure(Call<Boolean> call, Throwable t) {
-                        Log.i("event=dislikeApiFailed", "logInUserId=" + logInUserId + " likedUserId=" + displayUser.get_id());
+                        Log.i("event=dislikeApiFailed", "logInUserId=" + loginUserId + " likedUserId=" + displayUser.get_id());
                     }
                 });
             }
@@ -175,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton rejectButton = findViewById(R.id.rejectButtonId1);
         rejectButton.setOnClickListener(v -> {
-            apiService.userDislike(logInUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
+            apiService.userDislike(loginUserId, displayUser.get_id()).enqueue(new Callback<Boolean>() {
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     Boolean isDone = response.body();
@@ -183,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Boolean> call, Throwable t) {
-                    Log.e("event=dislikeApiFailed", "logInUserId=" + logInUserId + " dislikedUserId=" + displayUser.get_id());
+                    Log.e("event=dislikeApiFailed", "logInUserId=" + loginUserId + " dislikedUserId=" + displayUser.get_id());
                 }
             });
             if (userIndex < users.size() - 1) {
@@ -198,8 +194,8 @@ public class MainActivity extends AppCompatActivity {
                 userLocationView.setText(displayUser.getCity());
             }
             else{
-                Intent intentMatchScreen = new Intent(MainActivity.this, Match.class);
-                intentMatchScreen.putExtra("userId", logInUserId);
+                Intent intentMatchScreen = new Intent(MainActivity.this, MatchActivity.class);
+                intentMatchScreen.putExtra("loginUserId", loginUserId);
                 startActivity(intent);
                 finish();
             }

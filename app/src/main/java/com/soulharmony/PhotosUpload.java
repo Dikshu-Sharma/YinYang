@@ -42,7 +42,7 @@ public class PhotosUpload extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
+        userId = intent.getStringExtra("loginUserId");
         Log.i("event=photosUploading", "userId=" + userId);
 
         firebaseStorage = FirebaseStorage.getInstance();
@@ -79,7 +79,7 @@ public class PhotosUpload extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("isLoggedIn", true);
-                        editor.putString("userId", userId);
+                        editor.putString("loginUserId", userId);
                         editor.apply();
 //                        Toast.makeText(PhotosUpload.this, "Images Uploaded", Toast.LENGTH_LONG).show();
                     }
@@ -91,7 +91,7 @@ public class PhotosUpload extends AppCompatActivity {
                 }
             });
             Intent intent1 = new Intent(PhotosUpload.this, MainActivity.class);
-            intent1.putExtra("userId", userId);
+            intent1.putExtra("loginUserId", userId);
             startActivity(intent1);
             finish();
         });

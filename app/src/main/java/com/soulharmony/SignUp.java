@@ -76,7 +76,7 @@ public class SignUp extends AppCompatActivity {
                     public void onResponse(Call<User> call, Response<User> response) {
                         Toast.makeText(SignUp.this, "User Saved", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignUp.this, PhotosUpload.class);
-                        intent.putExtra("userId", userId);
+                        intent.putExtra("loginUserId", userId);
                         startActivity(intent);
                         finish();
                     }
