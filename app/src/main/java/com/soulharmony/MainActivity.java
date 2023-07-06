@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                             userIndex++;
                             displayUser = users.get(userIndex);
                             currentUserImages = getCurrentUserImages(displayUser);
+                            userImageIndex=0;
                             Picasso.get()
                                     .load(currentUserImages.get(userImageIndex))
                                     .into(imageView);
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 userIndex++;
                 displayUser = users.get(userIndex);
                 currentUserImages = getCurrentUserImages(displayUser);
+                userImageIndex = 0;
                 Picasso.get()
                         .load(currentUserImages.get(userImageIndex))
                         .into(imageView);

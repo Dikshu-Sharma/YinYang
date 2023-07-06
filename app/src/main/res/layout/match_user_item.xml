@@ -12,8 +12,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImageId1"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
@@ -29,18 +29,18 @@
                 android:id="@+id/userMatchesId1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="Name"
                 android:textColor="@color/black"
-                android:textSize="23.40sp"/>
+                android:textSize="30.40sp"/>
 
             <TextView
                 android:id="@+id/userStatusId1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Online"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp"
-                android:text="Status"/>
+                android:textSize="@dimen/_11sdp" />
 
         </LinearLayout>
 

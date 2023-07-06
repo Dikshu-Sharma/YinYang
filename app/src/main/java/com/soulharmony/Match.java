@@ -1,9 +1,13 @@
 package com.soulharmony;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,8 +29,6 @@ import retrofit2.Response;
 public class Match extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private UserAdapter userAdapter;
-
     private String logInUserId;
 
     @Override
@@ -38,17 +40,28 @@ public class Match extends AppCompatActivity {
         Intent intent = getIntent();
         logInUserId = intent.getStringExtra("userId");
 
-//        ImageButton homeButton = findViewById(R.id.homeButtonId4);
-//        homeButton.setOnClickListener(v -> {
-//            Intent intentMain = new Intent(Match.this, MainActivity.class);
-//            intentMain.putExtra("userId", logInUserId);
-//            startActivity(intentMain);
-//            finish();
-//        });
+        ImageButton homeButtonMatchScreen = findViewById(R.id.homeMatchId1);
+        homeButtonMatchScreen.setOnClickListener(v -> {
+            Intent homeScreenIntent = new Intent(Match.this, MainActivity.class);
+            homeScreenIntent.putExtra("userId", logInUserId);
+            startActivity(homeScreenIntent);
+            finish();
+        });
+
+        ImageButton logoutButtonMatchScreen = findViewById(R.id.logoutMatchId1);
+        logoutButtonMatchScreen.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isLoggedIn", false);
+            editor.putString("userId", null);
+            editor.apply();
+            Intent intent1 = new Intent(Match.this, SignIn.class);
+            startActivity(intent1);
+            finish();
+        });
 
         recyclerView = findViewById(R.id.mainUserRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
 
         RetrofitService retrofitService = new RetrofitService();
@@ -57,14 +70,12 @@ public class Match extends AppCompatActivity {
         apiService.matches(logInUserId).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if(response.body().size() == 0){
-                    List<User> dummyUser = new ArrayList<>();
-                    dummyUser.add(Constants.DUMMY_USER);
-                    userAdapter = new UserAdapter(dummyUser);
-                }else {
-                    userAdapter = new UserAdapter(response.body());
+                if (response.body().size() == 0) {
+                    Toast.makeText(Match.this, "Please come back later", Toast.LENGTH_SHORT).show();
+                } else {
+                    UserAdapter userAdapter = new UserAdapter(response.body());
+                    recyclerView.setAdapter(userAdapter);
                 }
-                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
