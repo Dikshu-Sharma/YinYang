@@ -7,12 +7,12 @@ interests, helping them find meaningful connections and build relationships. Wit
 user-friendly interface, YinYang offers a seamless and enjoyable dating experience.
 
 * Key Features
-  * Personalized Profiles: Create a unique profile that highlights your interests, hobbies, and
-  preferences, enabling you to showcase your true self.
   * Chat and Messaging: Engage in private and secure conversations with your matches through our in-app
   messaging feature, fostering meaningful connections.
   * Photo Sharing: Share your favorite moments by easily uploading and viewing photos within the app,
   enhancing the interaction with your matches.
+  * Personalized Profiles: Create a unique profile that highlights your interests, hobbies, and
+  preferences, enabling you to showcase your true self.
   * Safety and Privacy: We prioritize the safety and privacy of our users, implementing measures to
   ensure a secure environment and protect personal information using Firebase realtime database.
 
@@ -30,8 +30,4 @@ user-friendly interface, YinYang offers a seamless and enjoyable dating experien
 
 ### Demo
 
-
 https://github.com/silenceofranger/YinYang/assets/38451055/2bb29adf-fb60-485b-af9d-49cd35c1ff51
-
-
-<iframe width="560" height="315" src="/YinYangDemo.mov" frameborder="0" allowfullscreen></iframe>
