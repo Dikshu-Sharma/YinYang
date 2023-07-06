@@ -1,5 +1,7 @@
 # YinYang
+<img src="/ProjectFlowDiagram.png" alt="Project Flow Diagram" width="300" height="300">
 
+# Description
 YinYang is a modern and intuitive dating Android app designed to connect individuals with shared
 interests, helping them find meaningful connections and build relationships. With its sleek and
 user-friendly interface, YinYang offers a seamless and enjoyable dating experience.
@@ -24,7 +26,7 @@ user-friendly interface, YinYang offers a seamless and enjoyable dating experien
 
 ### Project Flow Diagram
 
-<img src="/ProjectFlowDiagram.png" alt="Project Flow Diagram" width="800" height="600">
+<img src="/ProjectFlowDiagram.png" alt="Project Flow Diagram" width="1000" height="600">
 
 ### Demo
 
