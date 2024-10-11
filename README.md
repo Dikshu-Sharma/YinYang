@@ -27,7 +27,3 @@ user-friendly interface, YinYang offers a seamless and enjoyable dating experien
 ### Project Flow Diagram
 
 <img src="/ProjectFlowDiagram.png" alt="Project Flow Diagram" width="1000" height="600">
-
-### Demo
-
-![YinYangDemo](https://github.com/silenceofranger/YinYang/assets/38451055/3293b808-6568-4248-be6d-15470ccd5f78)
